@@ -7,6 +7,8 @@ export const userSchema = joi.object({
         otherNames: joi.string(),
         email: joi.string().email().required(),
         password: joi.string().password(4).required(),
-        confirmedPassword: joi.ref('password')
+        confirmedPassword: joi.ref('password'),
+        userName: joi.string(),
+        termsAndConditions: joi.boolean(),
     }
 })

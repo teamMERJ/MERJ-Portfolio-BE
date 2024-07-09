@@ -17,6 +17,7 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "express-oas-generator": "^1.0.46",
+    "joi": "^17.13.3",
     "mongoose": "^8.4.5",
     "multer": "^1.4.5-lts.1",
     "multer-savefilesorg": "^1.0.2",

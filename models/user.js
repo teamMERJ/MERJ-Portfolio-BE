@@ -13,6 +13,8 @@ const userSchema = new Schema({
     username: { type: String, unique: true },
     termsAndConditions: { type: Boolean },
   },
+
+
   userProfile: {
     profilePicture: { type: String },
     location: { type: String },
@@ -29,10 +31,12 @@ const userSchema = new Schema({
     languages: [{ type: String }],
   },
 
+
   socials: {
     gitHubLink: { type: String },
     LinkedInlink: { type: String },
   },
+
 
   skills: [
     {
@@ -43,6 +47,8 @@ const userSchema = new Schema({
       },
     },
   ],
+
+
   experience: [
     {
       companyName: { type: String },
@@ -54,6 +60,8 @@ const userSchema = new Schema({
       endDate: { type: String },
     },
   ],
+
+
   education: [
     {
       schoolName: { type: String },
@@ -65,6 +73,8 @@ const userSchema = new Schema({
       endDate: { type: String },
     },
   ],
+
+
   achievements: [
     {
       awards: { type: String },
@@ -74,6 +84,8 @@ const userSchema = new Schema({
       nameOfInstitution: { type: String },
     },
   ],
+
+
   projects: [
     {
       projectName: { type: String },
@@ -86,6 +98,8 @@ const userSchema = new Schema({
       endDate: { type: String },
     },
   ],
+
+
   volunteering: [
     {
       organization: { type: String },
@@ -100,6 +114,7 @@ const userSchema = new Schema({
     },
   ],
 });
+
 
 export const userModel = model("User", userSchema);
 userSchema.plugin(toJSON);

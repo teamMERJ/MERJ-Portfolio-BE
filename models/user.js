@@ -7,9 +7,9 @@ const userSchema = new Schema({
   otherNames: { type: String },
   email: { type: String, unique: true },
   password: { type: String },
-  username: { type: String, unique: true },
+  userName: { type: String, default: null },
   termsAndConditions: { type: Boolean },
 });
 
-export const User = model("User", userSchema);
+export const UserModel = model("User", userSchema);
 userSchema.plugin(toJSON);

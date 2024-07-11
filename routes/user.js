@@ -1,6 +1,8 @@
-import { signUp } from "../controllers/user.js";
+import { getUser, signUp } from "../controllers/user.js";
 import { Router } from "express";
 
-export const userRouter = Router()
+export const userRouter = Router();
 
-userRouter.post('/user/signup', signUp)
+userRouter.post('/users/signup', signUp);
+
+userRouter.get('/users/:id', getUser)

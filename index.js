@@ -3,6 +3,7 @@ import expressOasGenerator from "express-oas-generator";
 import mongoose from "mongoose";
 import { dbConnection } from "./config/db.js";
 import cors from "cors";
+import { experienceRouter } from "./routes/experience.js";
 
 
 // connect to the databse
@@ -25,6 +26,7 @@ portfolioApp.use(express.static('portfolio'))
 
 // use routes
 expressOasGenerator.handleRequests();
+portfolioApp.use(experienceRouter)
 
 
 // listening to the app for a response

@@ -3,6 +3,7 @@ import expressOasGenerator from "express-oas-generator";
 import mongoose from "mongoose";
 import { dbConnection } from "./config/db.js";
 import cors from "cors";
+import { experienceRouter } from "./routes/experience.js";
 import { educationRouter } from "./routes/education.js";
 import { achievementRouter } from "./routes/achievement.js";
 
@@ -27,9 +28,9 @@ portfolioApp.use(express.static('portfolio'))
 
 // use routes
 expressOasGenerator.handleRequests();
+portfolioApp.use(experienceRouter)
 portfolioApp.use(educationRouter)
 portfolioApp.use(achievementRouter);
-
 
 
 // listening to the app for a response

@@ -4,7 +4,9 @@ import mongoose from "mongoose";
 import { dbConnection } from "./config/db.js";
 import cors from "cors";
 import { userRouter } from "./routes/user.js";
-
+import { experienceRouter } from "./routes/experience.js";
+import { educationRouter } from "./routes/education.js";
+import { achievementRouter } from "./routes/achievement.js";
 
 // connect to the databse
 dbConnection();
@@ -17,16 +19,17 @@ expressOasGenerator.handleResponses(portfolioApp, {
     mongooseModels:mongoose.modelNames()
 });
 
-
 // applying middlewares
 portfolioApp.use(cors());
 portfolioApp.use(express.json());
 portfolioApp.use(express.static('portfolio'))
 portfolioApp.use('/api/v1', userRouter)
 
-
 // use routes
 expressOasGenerator.handleRequests();
+portfolioApp.use(experienceRouter)
+portfolioApp.use(educationRouter)
+portfolioApp.use(achievementRouter);
 
 
 // listening to the app for a response

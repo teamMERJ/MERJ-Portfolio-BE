@@ -6,6 +6,7 @@ import cors from "cors";
 import { experienceRouter } from "./routes/experience.js";
 import { educationRouter } from "./routes/education.js";
 import { achievementRouter } from "./routes/achievement.js";
+import { skillRouter } from "./routes/skill.js";
 
 
 // connect to the databse
@@ -31,6 +32,7 @@ expressOasGenerator.handleRequests();
 portfolioApp.use(experienceRouter)
 portfolioApp.use(educationRouter)
 portfolioApp.use(achievementRouter);
+portfolioApp.use(skillRouter);
 
 
 // listening to the app for a response

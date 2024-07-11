@@ -3,6 +3,7 @@ import expressOasGenerator from "express-oas-generator";
 import mongoose from "mongoose";
 import { dbConnection } from "./config/db.js";
 import cors from "cors";
+import { achievementRouter } from "./routes/achievement.js";
 
 
 // connect to the databse
@@ -25,6 +26,7 @@ portfolioApp.use(express.static('portfolio'))
 
 // use routes
 expressOasGenerator.handleRequests();
+portfolioApp.use(achievementRouter);
 
 
 // listening to the app for a response

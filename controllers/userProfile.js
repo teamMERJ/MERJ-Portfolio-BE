@@ -12,25 +12,26 @@ export const postUserProfile = async (req, res) => {
     }
 
     // create user profile
-    const profile = await UserProfile.create(value)
+    const userSessionId = req.session.user.id
     // create user profile with value
-    const user = await User.findById(value.user);
+    const user = await User.findById(userSessionId);
 
     // find user with ID that was passed by creating the profile
     if (!user) {
       return res.status(404).send('User not found');
     }
 
+    const profile = await UserProfile.create(value)
     // push the profile that was created in the user found
-    user.userProfile.push(profile._id)
+    user.userProfile = profile._id
 
     // save the user with the userprofile ID
     await User.save();
 
     // return response
-    res.status(201).json
+    res.status(201).json({profile})
   } catch (error) {
-    return res.status(500).send(error)
+    console.log(error)
   }
 };
 

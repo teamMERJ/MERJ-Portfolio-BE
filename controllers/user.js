@@ -35,3 +35,4 @@ const userDetails = await UserModel.findById(userId)
 return res.status(201).json({userDetails})
 
 }
+

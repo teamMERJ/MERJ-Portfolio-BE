@@ -7,6 +7,7 @@ import { userRouter } from "./routes/user.js";
 import { experienceRouter } from "./routes/experience.js";
 import { educationRouter } from "./routes/education.js";
 import { achievementRouter } from "./routes/achievement.js";
+import { profileRouter } from "./routes/userProfile.js";
 
 // connect to the databse
 dbConnection();
@@ -30,6 +31,7 @@ expressOasGenerator.handleRequests();
 portfolioApp.use(experienceRouter)
 portfolioApp.use(educationRouter)
 portfolioApp.use(achievementRouter);
+portfolioApp.use(profileRouter)
 
 
 // listening to the app for a response

@@ -1,4 +1,4 @@
- import { Router } from "express";
+import { Router } from "express";
 import { deleteUserProfile, getAllProfile, getOneProfile, patchProfile, postUserProfile } from "../controllers/userProfile.js";
 
 export const profileRouter = Router();

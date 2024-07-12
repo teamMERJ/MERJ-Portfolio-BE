@@ -8,7 +8,7 @@ const userSchema = new Schema({
   email: { type: String, unique: true },
   password: { type: String },
   username: { type: String, unique: true },
-  termsAndConditions: { type: Boolean },
+  termsAndConditions: { type: Boolean }
 });
 
 export const User = model("User", userSchema);

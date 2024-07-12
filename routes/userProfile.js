@@ -9,4 +9,6 @@ profileRouter.get('/users/profiles/:id', getOneProfile);
 profileRouter.patch('/users/profiles/:id', patchProfile);
 profileRouter.delete('/users/profiles /:id', deleteUserProfile);
 
+{}
+
 

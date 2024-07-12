@@ -8,7 +8,10 @@ export const postEducation = async (req, res) => {
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
-    console.log("value", value);
+     //Assuming user ID is available in req.user 
+     const userId = req.user.id;
+    // Assign the user ID to the education record
+    value.user = userId; 
     const newEducation = await Education.create(value);
 
     //
@@ -18,10 +21,15 @@ export const postEducation = async (req, res) => {
   }
 };
 
-// this endpoint will get all events
-export const education = async (req, res) => {
+// this endpoint will get all education
+
+export const getAllUserEducation = async (req, res) => {
   try {
-    const allEducation = await Education.find();
+     // Assuming user ID is available in req.params.id
+     const userId = req.user.id;
+    // Fetch all education records belonging to the specified user ID
+    const allEducation = await Education.find({ user: userId });
+
     if (allEducation.length == 0) {
       return res.status(404).send("No education added");
     }
@@ -31,10 +39,13 @@ export const education = async (req, res) => {
   }
 };
 
-// this endpoint will get one event
+// this endpoint will get one education
 export const getEducation = async (req, res) => {
   try {
-    const oneEducation = await Education.findById(req.params.id);
+    const userId = req.user.id; // Assuming user ID is available in req.user 
+    const educationId = req.params.id;
+    //fetching one education that belongs to a particular user
+    const oneEducation = await Education.findById({id:educationId, user:userId});
     if (!oneEducation) {
       return res.status(400).send('Education not found')
     }
@@ -51,14 +62,15 @@ export const patchEducation = async (req, res) => {
     const { error, value } = educationSchema.validate(req.body);
     if (error) {
       return res.status(400).send(error.details[0].message);
-    }
-    console.log("value", value);
+    }  
+    // Filter by both education ID and user ID
+    const userId = req.user.id; 
     const updateEducation = await Education.findByIdAndUpdate(
-      req.params.id,
-      { ...req.body},
+      {id:req.params.id, user:userId},
+      { ...value},
       { new: true }
     );
-    res.status(200).send(`This education ${updateEducation.schoolName} was successfully updated`);
+    res.status(200).send(`Education ${updateEducation} was successfully updated`);
   } catch (error) {
     console.log(error);
   }
@@ -72,8 +84,9 @@ export const deleteEducation = async (req, res) => {
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
-    const deletedEducation = await Education.findByIdAndDelete(
-      req.params.id
+     // Filter by both education ID and user ID
+     const userId = req.user.id;
+    const deletedEducation = await Education.findByIdAndDelete({id:req.params.id, user: userId}
     );
     res.status(200).send(`Education ${deletedEducation} deleted successfully`);
   } catch (error) {

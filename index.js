@@ -3,11 +3,12 @@ import expressOasGenerator from "express-oas-generator";
 import mongoose from "mongoose";
 import { dbConnection } from "./config/db.js";
 import cors from "cors";
+import { userRouter } from "./routes/user.js";
 import { experienceRouter } from "./routes/experience.js";
 import { educationRouter } from "./routes/education.js";
 import { achievementRouter } from "./routes/achievement.js";
 import { profileRouter } from "./routes/userProfile.js";
-
+import { projectRouter } from "./routes/project.js";
 
 // connect to the databse
 dbConnection();
@@ -20,12 +21,11 @@ expressOasGenerator.handleResponses(portfolioApp, {
     mongooseModels:mongoose.modelNames()
 });
 
-
 // applying middlewares
 portfolioApp.use(cors());
 portfolioApp.use(express.json());
 portfolioApp.use(express.static('portfolio'))
-
+portfolioApp.use('/api/v1', userRouter)
 
 // use routes
 expressOasGenerator.handleRequests();
@@ -33,6 +33,8 @@ portfolioApp.use(experienceRouter)
 portfolioApp.use(educationRouter)
 portfolioApp.use(achievementRouter);
 portfolioApp.use(profileRouter)
+portfolioApp.use(projectRouter)
+
 
 
 // listening to the app for a response

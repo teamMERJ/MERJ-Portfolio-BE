@@ -80,17 +80,20 @@ export const patchProfile = async (req, res) => {
 
 
 // delete a profile
-export const deleteUserProfile = (req, res) => {
-  try {
-    const { error, value} = profileSchema.validate(req.body)
-    if (error) {
-      return res.status(400).send(error.details[0].message);
-    }
-    const deletedProfile = profileSchema.findByIdAndDelete(req.params.id)
-    res.status(200).send(`User profile with ID ${deleteUserProfile} has been deleted`)
-  } catch (error) {
-    console.log(error)
-  }
-}
+export const deleteuserProfile = async (req, res) => {
+    try {
+      const { error, value } = profileSchema.validate(req.body);
+      if (error) {
+        return res.status(400).send(error.details[0].message);
+      }
+      console.log('value', value)
 
+      const deletedprofile = await UserProfile.findByIdAndDelete(
+        req.params.id
+      );
+      res.status(200).send(`Profile with ID ${deletedprofile} has deleted `);
+    } catch (error) {
+      console.log(error)
+    }
+  };
 

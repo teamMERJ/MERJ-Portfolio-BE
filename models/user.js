@@ -16,7 +16,9 @@ const userSchema = new Schema({
   userProfile: { type: Types.ObjectId, ref: 'UserProfile' },
   volunteering: [{ type: Types.ObjectId, ref: 'Volunteering' }],
   experiences: [{ type: Types.ObjectId, ref: 'Experiences' }],
+},{
+  timestamps: true
 });
 
-export const User = model("User", userSchema);
+export const userModel = model("User", userSchema);
 userSchema.plugin(toJSON);

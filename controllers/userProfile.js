@@ -1,96 +1,122 @@
-import { UserProfile } from "../models/userProfile.js";
-import { User } from "../models/user.js";
+import { userProfileModel } from "../models/userProfile.js";
+import { userModel } from "../models/user.js";
 import { profileSchema } from "../schema/userProfile.js";
 
-
-// post a user porfile
+// Create or update user profile
 export const postUserProfile = async (req, res) => {
   try {
-    const { error, value } = profileSchema.validate(req.body)
+    const { error, value } = profileSchema.validate(req.body);
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
 
-    // create user profile
-    const userSessionId = req.session.user.id
-    // create user profile with value
-    const user = await User.findById(userSessionId);
+    // Find the user with the session ID
+    // const userSessionId = req.session.user.id;
+    
+    const userId = value.user; 
 
-    // find user with ID that was passed by creating the profile
+    const user = await userModel.findById(userId);
+  
     if (!user) {
       return res.status(404).send('User not found');
     }
 
-    const profile = await UserProfile.create(value)
-    // push the profile that was created in the user found
-    user.userProfile = profile._id
+    // Create or update the user profile
+    let userProfile = await userProfileModel.findOneAndUpdate(
+       // Find by user ID
+      { user: userId },
+      value,
+      // if unavailable, create a new user Id
+      { new: true, upsert: true } 
+    );
 
-    // save the user with the userprofile ID
-    await User.save();
+    // Associate the user profile with the user
+    user.userProfile = userProfile._id;
+    await user.save();
 
-    // return response
-    res.status(201).json({profile})
+    // Return the user profile
+    res.status(201).json({ userProfile });
+
   } catch (error) {
-    console.log(error)
+    console.error('Updating user profile failed');
+    res.status(500).send(error.message);
   }
 };
 
-
-// get only one user profile
+// Get a single user profile by ID
 export const getOneProfile = async (req, res) => {
-  const userProfile = await profileSchema.findById(req.params.id)
-  res.status(200).json(userProfile)
-}
+  try {
+    const userProfile = await userProfileModel.findById(req.params.id);
+    if (!userProfile) {
+      return res.status(404).send('User profile not found');
+    }
+    res.status(200).json({ userProfile });
+  } catch (error) {
+    console.error('user profile not found');
+    res.status(500).send(error.message);
+  }
+};
 
-
-// get all user related profile details
+// Get all user related profiles
 export const getAllProfile = async (req, res) => {
   try {
-    // get all profile details related to the user
-    const userId = req.params.id
-    const relatedProfile = await profileSchema.find({ userId })
-    if (relatedProfile.length == 0) {
-      return res.status(404).send('No profile added')
+    // const userId = req.params.id;
+    const relatedProfiles = await userProfileModel.find();
+    if (relatedProfiles.length === 0) {
+      return res.status(404).send('No profile added');
     }
-    res.status(200).json({ relatedProfile })
+    res.status(200).json({ relatedProfiles });
   } catch (error) {
-    next(error)
+    console.log(error);
+    res. status(500).send(error.message)
   }
-}
+};
 
-
-// edit profile details 
-export const patchProfile = async (req, res) => {
+// Edit profile details
+export const updateProfile = async (req, res) => {
   try {
-    const { error, value} = profileSchema.validate(req.body)
+    const { error, value } = profileSchema.validate(req.body);
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
 
-    const updatedProfile = await profileSchema.findByIdAndUpdate(req.params.id,
-      {...req.body},
-      {new: true}
+    const updatedProfile = await userProfileModel.findByIdAndUpdate(
+      req.params.userProfileId,
+      value,
+      { new: true }
     );
-    res.status(200). send(`User profile with ID ${updatedProfile.location} has been successfully updated`)
 
+    if (!updatedProfile) {
+      return res.status(404).send('User profile not found');
+    }
+
+    res.status(200).json({ message: `User profile with ID ${updatedProfile._id} has been successfully updated`, updatedProfile });
   } catch (error) {
-    console.log(error)
+    console.error('Error updating user profile:', error);
+    res.status(500).send(error.message);
   }
 };
 
 
-// delete a profile
-export const deleteUserProfile = (req, res) => {
+// Delete a profile
+export const deleteUserProfile = async (req, res) => {
   try {
-    const { error, value} = profileSchema.validate(req.body)
-    if (error) {
-      return res.status(400).send(error.details[0].message);
-    }
-    const deletedProfile = profileSchema.findByIdAndDelete(req.params.id)
-    res.status(200).send(`User profile with ID ${deleteUserProfile} has been deleted`)
-  } catch (error) {
-    console.log(error)
-  }
-}
+    const deletedUserProfile = await userProfileModel.findByIdAndDelete(req.params.userProfileId);
 
+    if (!deletedUserProfile) {
+      return res.status(404).send('User profile not found');
+    }
+
+    const user = await userModel.findById(deletedUserProfile.user);
+    if (user) {
+      user.userProfile = null;
+      await user.save();
+    }
+
+    res.status(200).json({ message: `User profile with ID ${deletedUserProfile._id} has been deleted` });
+  } catch (error) {
+    console.error('Error deleting user profile:', error);
+    res.status(500).send(error.message);
+  }
+};
 

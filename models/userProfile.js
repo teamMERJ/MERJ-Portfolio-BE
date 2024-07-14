@@ -16,8 +16,8 @@ const userProfileSchema = new Schema({
     languages: [{ type: String }],
     gitHubLink: { type: String },
     linkedInlink: { type: String },
-    user: {type:Types.ObjectId, ref: 'User'}
+    user: {type:Types.ObjectId, ref: 'userModel'}
 });
 
 userProfileSchema.plugin(toJSON);
-export const UserProfile = model("UserProfile", userProfileSchema);
+export const userProfileModel = model("UserProfile", userProfileSchema);

@@ -9,8 +9,9 @@ export const profileSchema = joi.object({
     about: joi.string(),
     dateOfBirth: joi.date(),
     contact: joi.number(),
-    cv: joi.string(),
+    cv: joi.string(), 
     languages: joi.array().items(joi.string()),
     gitHubLink: joi.string(),
     linkedInlink: joi.string()
+   
 });

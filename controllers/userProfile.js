@@ -12,25 +12,26 @@ export const postUserProfile = async (req, res) => {
     }
 
     // create user profile
-    const profile = await UserProfile.create(value)
+    const userSessionId = req.session.user.id
     // create user profile with value
-    const userProfile = await User.findById(value.user);
+    const user = await User.findById(userSessionId);
 
     // find user with ID that was passed by creating the profile
-    if (!User) {
+    if (!user) {
       return res.status(404).send('User not found');
     }
 
+    const profile = await UserProfile.create(value)
     // push the profile that was created in the user found
-    User.userProfile.push(userProfile._id)
+    user.userProfile = profile._id
 
     // save the user with the userprofile ID
     await User.save();
 
     // return response
-    res.status(201).json
+    res.status(201).json({profile})
   } catch (error) {
-    return res.status(500).send(error)
+    console.log(error)
   }
 };
 
@@ -79,70 +80,6 @@ export const patchProfile = async (req, res) => {
 
 
 // delete a profile
-export const deleteUserProfile = (req, res) => {
-  try {
-    const { error, value} = profileSchema.validate(req.body)
-    if (error) {
-      return res.status(400).send(error.details[0].message);
-    }
-    const deletedProfile = profileSchema.findByIdAndDelete(req.params.id)
-    res.status(200).send(`User profile with ID ${deleteUserProfile} has been deleted`)
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-
-=======
-import { profileSchema } from "../schema/userProfile.js";
-
-export const postProfile = async (req, res) => {
-    try {
-        const  {error, value } = profileSchema.validate(req.body)
-    if (error) {
-        res.status(400).json(error.details[0].message)
-    }
-     console.log('value', value)
-
-     const userProfile = await UserProfile.create(value)
-     res.status(201).json(userProfile)
-}
-     catch (error) {
-        next(error)
-    }
-};
-  
-export const getAllProfile = async(req, res, next) => {
-    try {
-        const allProfile = await UserProfile.find()
-        if (allProfile.length == 0){
-            return res.status(404).send('No education added')
-        }
-    } catch (error) {
-        next(error)
-    }
-};
-
-
-export const getOneProfile = async (req, res, next) =>{
-   try {
-    const getProfile = await UserProfile.findById(req.params.id)
-    res.status(200).json(getProfile)
-   } catch (error) {
-        next(error)
-   }
-};
-
-
-export const patchProfile = async(req, res) => {
-    try {
-        
-    } catch (error) {
-        
-    }
-}
-
-
 export const deleteuserProfile = async (req, res) => {
     try {
       const { error, value } = profileSchema.validate(req.body);
@@ -159,3 +96,4 @@ export const deleteuserProfile = async (req, res) => {
       console.log(error)
     }
   };
+

@@ -69,8 +69,3 @@ portfolioApp.listen (port, () =>{
 
 
 
-// "firstName": "Jane", "lastName": "Smith", "email": "janesmith@example.com", "password": "pw1234", "confirmedPassword": "pw1234","userName": "JaneS"
-//   "firstName": "Alice", "lastName": "Smith", "email": "alice.smith@example.com","password": "P@ssw0rd","confirmedPassword": "P@ssw0rd","userName": "AliceS"
-//  "firstName": "Bob","lastName": "Johnson","email": "bob.johnson@example.com","password": "b0bP@ss","confirmedPassword": "b0bP@ss","userName": "BobJ"
-// "firstName": "Emily","lastName": "Davis","email": "emily.davis@example.com","password": "3milyP@ss","confirmedPassword": "3milyP@ss","userName": "EmDavis"
-//   "firstName": "Michael", "lastName": "Brown", "email": "michael.brown@example.com", "password": "Br0wnP@ss", "confirmedPassword": "Br0wnP@ss", "userName": "MikeB"

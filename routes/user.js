@@ -1,3 +1,4 @@
+import { getUser, login, signUp } from "../controllers/user.js";
 import { getUser, getUsers, login, signup } from "../controllers/user.js";
 import { Router } from "express";
 import { createUserProfile, updateUserProfile } from "../controllers/userProfile.js";
@@ -22,10 +23,10 @@ userRouter.post("/users/userProfile", remoteUpload.fields([
   createUserProfile
 );
 
-
 userRouter.patch("/users/userProfile/:id", remoteUpload.fields([
   { name: "profilePicture", maxCount: 1 },
   { name: "resume", maxCount: 1 },
 ]),
-  checkUserSession,updateUserProfile
+  checkUserSession, updateUserProfile
 );
+

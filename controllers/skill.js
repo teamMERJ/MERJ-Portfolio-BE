@@ -1,35 +1,34 @@
 import { Skills } from "../models/skill.js";
+import { User } from "../models/user.js";
 import { skillsSchema } from "../schema/skill.js";
 
-// this endpoint will post an Skills
-export const postSkills = async (req, res) => {
+export const createUserSkill = async (req, res) => {
   try {
     const { error, value } = skillsSchema.validate(req.body);
+
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
-    console.log("value", value);
-    const newSkills = await Skills.create(value);
 
-    //
-    res.status(201).json(newSkills);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// this endpoint will get all skills
-export const skills = async (req, res) => {
-  try {
-    const allSkills = await Skills.find();
-    if (allSkills.length == 0) {
-      return res.status(404).send("No Skills added");
+    const userSessionId = req.session.user.id;
+   
+    const user = await User.findById(userSessionId);
+    if (!user) {
+      return res.status(404).send("User not found");
     }
-    res.status(200).json(allSkills);
+
+    const skill = await Skills.create({ ...value, user: userSessionId });
+
+    user.skills.push(skill._id)
+
+    await user.save();
+
+    res.status(201).json({ skill });
   } catch (error) {
     console.log(error);
   }
 };
+
 
 // this endpoint will get one event
 export const getSkill = async (req, res) => {
@@ -44,39 +43,70 @@ export const getSkill = async (req, res) => {
   }
 };
 
-// this endpoint will update a Skill
-export const patchSkill = async (req, res) => {
+
+export const getAllUserSkills = async (req, res) => {
   try {
-    console.log(req.params.id);
-    const { error, value } = skillsSchema.validate(req.body);
-    if (error) {
-      return res.status(400).send(error.details[0].message);
+    //we are fetching Skill that belongs to a particular user
+    const userSessionId = req.session.user.id
+    const allSkill = await Skills.find({ user: userSessionId });
+    if (allSkill.length == 0) {
+      return res.status(404).send("No Skill added");
     }
-    console.log("value", value);
-    const updateSkill = await Skills.findByIdAndUpdate(
-      req.params.id,
-      { ...req.body},
-      { new: true }
-    );
-    res.status(200).send(`Skill ${updateSkill} updated successfully`);
+    res.status(200).json({ Skills: allSkill });
   } catch (error) {
-    console.log(error);
+    return res.status(500).json({error})
   }
 };
 
-// this endpoint will delete a Skill
 
-export const deleteSkill = async (req, res) => {
-  try {
-    const { error, value } = skillsSchema.validate(req.body);
-    if (error) {
-      return res.status(400).send(error.details[0].message);
+
+export const updateUserSkill = async (req, res) => {
+    try {
+      const { error, value } = skillsSchema.validate(req.body);
+
+  
+      if (error) {
+        return res.status(400).send(error.details[0].message);
+      }
+  
+      const userSessionId = req.session.user.id; 
+      const user = await User.findById(userSessionId);
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+  
+      const skill = await Skills.findByIdAndUpdate(req.params.id, value, { new: true });
+        if (!skill) {
+            return res.status(404).send("Skill not found");
+        }
+  
+      res.status(200).json({ skill });
+    } catch (error) {
+      return res.status(500).json({error})
     }
-    const deletedSkill = await Skills.findByIdAndDelete(
-      req.params.id
-    );
-    res.status(200).send(`Skill ${deletedSkill} deleted successfully`);
-  } catch (error) {
-    console.log(error);
-  }
-};
+  };
+
+
+  export const deleteUserSkill = async (req, res) => {
+    try {
+     
+  
+      const userSessionId = req.session.user.id; 
+      const user = await User.findById(userSessionId);
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+  
+      const skill = await Skills.findByIdAndDelete(req.params.id);
+        if (!skill) {
+            return res.status(404).send("Skill not found");
+        }
+  
+        user.skills.pull(req.params.id);
+        await user.save();
+      res.status(200).json("Skill deleted");
+    } catch (error) {
+      return res.status(500).json({error})
+    }
+  };
+  

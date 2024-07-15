@@ -1,13 +1,16 @@
+import { createUserAchievement, deleteUserAchievement, getAllUserAchievements, updateUserAchievement } from "../controllers/achievement.js";
+import { checkUserSession } from "../middlewares/auth.js";
+
 import { Router } from "express";
-import { postAchievement, getAchievements, getAchievement, deleteAchievement, patchAchievement } from "../controllers/achievement.js";
 import { remoteUpload } from "../middlewares/uploads.js";
 
 
 export const achievementRouter = Router()
 
-// defining routes for endpoints 
-achievementRouter.post('/achievements',remoteUpload.single('image'),postAchievement) //,
-achievementRouter.get('/achievements',getAchievements)
-achievementRouter.get('/achievements/:id', getAchievement)
-achievementRouter.patch('/achievements/:id', remoteUpload.single('image'),patchAchievement)
-achievementRouter.delete('/achievements/:id',deleteAchievement)
+achievementRouter.post('/users/achievements', checkUserSession,remoteUpload.single('image'), createUserAchievement)
+
+achievementRouter.get('/users/achievements', checkUserSession, getAllUserAchievements)
+
+achievementRouter.patch('/users/achievements/:id', checkUserSession,remoteUpload.single('image'), updateUserAchievement)
+
+achievementRouter.delete('/users/achievements/:id', checkUserSession, deleteUserAchievement)

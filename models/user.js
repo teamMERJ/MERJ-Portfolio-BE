@@ -17,6 +17,7 @@ const userSchema = new Schema({
   experiences: [{ type: Types.ObjectId, ref: 'Experiences' }],
 },{
   timestamps: true
+
 });
 
 export const userModel = model("User", userSchema);

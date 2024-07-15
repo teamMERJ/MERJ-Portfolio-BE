@@ -1,0 +1,64 @@
+
+
+    "firstName": "Jane",
+ "lastName": "Smith",
+  "email": "janesmith@example.com",
+   "password": "pw1234",
+   "userName": "JaneS"
+    "confirmedPassword": "pw1234",
+    
+
+
+   "firstName": "Alice",
+ "lastName": "Smith",
+  "email": "alice.smith@example.com",
+  "password": "P@ssw0rd",
+  "userName": "AliceS"
+  "confirmedPassword": "P@ssw0rd",
+  
+
+ "firstName": "Bob",
+"lastName": "Johnson",
+"email": "bob.johnson@example.com",
+"password": "b0bP@ss",
+"userName": "BobJ"
+"confirmedPassword": "b0bP@ss",
+
+
+"firstName": "Emily",
+"lastName": "Davis",
+"email": "emily.davis@example.com",
+"password": "3milyP@ss",
+"userName": "EmDavis"
+"confirmedPassword": "3milyP@ss",
+
+
+
+"firstName": "Michael",
+ "lastName": "Brown", 
+ "email": "michael.brown@example.com",
+  "password": "Br0wnP@ss", 
+  "userName": "MikeB"
+  "confirmedPassword": "Br0wnP@ss",
+   
+ 
+
+
+   "schoolName":"University of Oxford",
+   "location" :"Oxford, UK",
+   "program" : "Doctor of Philosophy (PhD) in Physics",
+   "qualification" :"Doctoral Degree",
+   "grade":"Second Class Upper",
+   "startDate": "Sep 01 2016",
+   "endDate":"Thu Dec 31 2020"
+
+
+   {
+    "awards": "Best Employee of the Year",
+    "description": "Awarded for outstanding performance and dedication.",
+    "image": "https://example.com/award-image.jpg",
+    "date": "2023-06-15",
+    "nameOfInstitution": "ABC Corporation",
+    "user": "6693f51b695bd62f10891e9f"
+  }
+  

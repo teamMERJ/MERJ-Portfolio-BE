@@ -1,85 +1,109 @@
-import { Achievements } from "../models/achievement.js";
-import { achievementsSchema } from "../schema/achievement.js";
+import { Achievement } from "../models/achievement.js";
+import { achievementSchema } from "../schema/achievement.js";
+import { User } from "../models/user.js";
 
-// this endpoint will post an achievement
-export const postAchievement = async (req, res) => {
+
+export const createUserAchievement = async (req, res) => {
   try {
-    const { error, value } = achievementsSchema.validate(req.body);
+    const { error, value } = achievementSchema.validate({  
+      ...req.body,
+      image: req.file.filename});
+
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
-    console.log("value", value);
-    const newAchievement = await Achievements.create({
+
+    const userSessionId = req.session.user.id;
+   
+    const user = await User.findById(userSessionId);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    const achievement = await Achievement.create({ ...value, user: userSessionId });
+
+    user.achievements.push(achievement._id)
+
+    await user.save();
+
+    res.status(201).json({ achievement });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+
+export const getAllUserAchievements = async (req, res) => {
+  try {
+    // fetching achievements that belongs to a particular user
+    const userSessionId = req.session.user.id
+    const allAchievement = await Achievement.find({ user: userSessionId });
+    if (allAchievement.length == 0) {
+      return res.status(404).send("No Achievement added");
+    }
+    res.status(200).json({ Achievements: allAchievement });
+  } catch (error) {
+    return res.status(500).json({error})
+  }
+};
+
+
+
+export const updateUserAchievement = async (req, res) => {
+  try {
+    const { error, value } = achievementSchema.validate({
       ...req.body,
-      image: req.file.filename,
+      image: req.file.filename
     });
 
-    //
-    res.status(201).json(newAchievement);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// this endpoint will get all events
-export const getAchievements = async (req, res) => {
-  try {
-    const allAchievements = await Achievements.find();
-    if (allAchievements.legth == 0) {
-      return res.status(404).send("No achievement added");
-    }
-    res.status(200).json({ allAchievements });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// this endpoint will get one event
-export const getAchievement = async (req, res) => {
-  try {
-    const oneAchievement = await Achievements.findById(req.params.id);
-    if (!oneAchievement) {
-      return res.status(400).send('Achievement not found')
-    }
-    res.status(200).json(oneAchievement);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// this endpoint will update an achievement
-export const patchAchievement = async (req, res) => {
-  try {
-    console.log(req.params.id);
-    const { error, value } = achievementsSchema.validate(req.body);
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
-    console.log("value", value);
-    const updateAchievement = await Achievements.findByIdAndUpdate(
+
+    const userSessionId = req.session.user.id;
+    const user = await User.findById(userSessionId);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    const achievement = await Achievement.findByIdAndUpdate(
       req.params.id,
-      { ...req.body, image: req?.file?.filename },
+      value,
       { new: true }
     );
-    res.status(200).send(`This achievement ${updateAchievement.awards} was successfully updated`);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// this endpoint will delete an achievement
-
-export const deleteAchievement = async (req, res) => {
-  try {
-    const { error, value } = achievementsSchema.validate(req.body);
-    if (error) {
-      return res.status(400).send(error.details[0].message);
+    if (!achievement) {
+      return res.status(404).send("Achievement not found");
     }
-    const deletedAchievement = await Achievements.findByIdAndDelete(
-      req.params.id
-    );
-    res.status(200).json({message:'Achievement deleted successfully'});
+
+    res.status(200).json({ achievement });
   } catch (error) {
-    console.log(error);
+    console.error(error); // Log the error for debugging
+    return res.status(500).json({ error: error.message });
   }
 };
+
+
+  export const deleteUserAchievement = async (req, res) => {
+    try {
+    
+      const userSessionId = req.session.user.id; 
+      const user = await User.findById(userSessionId);
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+  
+      const achievement = await Achievement.findByIdAndDelete(req.params.id);
+        if (!achievement) {
+            return res.status(404).send("Achievement not found");
+        }
+  
+        user.achievements.pull(req.params.id);
+        await user.save();
+
+      res.status(200).json("Achievement deleted");
+    } catch (error) {
+      return res.status(500).json({error})
+    }
+  };
+  

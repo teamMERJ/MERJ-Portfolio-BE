@@ -1,4 +1,4 @@
-import { UserProfile } from "../models/userProfile.js";
+import { userProfile } from "../models/userProfile.js";
 import { User } from "../models/user.js";
 import { profileSchema } from "../schema/userProfile.js";
 

@@ -1,8 +1,8 @@
 import { Schema, Types, model } from "mongoose";
 import { toJSON } from "@reis/mongoose-to-json";
 
-const achievementsSchema = new Schema({
-  awards: { type: String },
+const achievementSchema = new Schema({
+  award: { type: String },
   description: { type: String },
   image: { type: String },
   date: { type: String },
@@ -10,6 +10,6 @@ const achievementsSchema = new Schema({
   user: { type: Types.ObjectId, ref: "User" },
 });
 
-achievementsSchema.plugin(toJSON);
+ achievementSchema.plugin(toJSON);
 
-export const Achievements = ("Achievements", achievementsSchema);
+export const Achievement = model("Achievement", achievementSchema);

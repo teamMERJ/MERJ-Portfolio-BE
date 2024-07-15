@@ -1,9 +1,10 @@
 import joi from "joi";
 
-export const achievementsSchema = joi.object({
-    awards: joi.string(),
+export const achievementSchema = joi.object({
+    award: joi.string().required(),
     description: joi.string(),
     image: joi.string(),
-    date: joi.date(),
-    nameOfInstitution: joi.string()
+    date: joi.string(),
+    nameOfInstitution: joi.string().required(),
+    user: joi.string() 
 })

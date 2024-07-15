@@ -10,10 +10,10 @@ import { userRouter } from "./routes/user.js";
 import { experienceRouter } from "./routes/experience.js";
 import {educationRouter} from "./routes/education.js"
 import { achievementRouter } from "./routes/achievement.js";
+import { skillRouter } from "./routes/skill.js";
 import { profileRouter } from "./routes/userProfile.js";
 import { volunteeringRouter } from "./routes/volunteering.js";
 import { projectRouter } from "./routes/project.js";
-import { skillRouter } from "./routes/skills.js";
 
 
 // Connect to the database
@@ -35,7 +35,6 @@ expressOasGenerator.handleResponses(portfolioApp, {
 portfolioApp.use(cors());
 portfolioApp.use(express.json());
 portfolioApp.use(express.static('portfolio'));
-
 portfolioApp.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
@@ -54,38 +53,13 @@ portfolioApp.use('/api/v1', profileRouter);
 portfolioApp.use('/api/v1', experienceRouter);
 portfolioApp.use('/api/v1', educationRouter);
 portfolioApp.use('/api/v1', achievementRouter);
-portfolioApp.use('/api/v1', volunteeringRouter)
+portfolioApp.use('/api/v1', volunteeringRouter);
+portfolioApp.use(skillRouter);
+portfolioApp.use('/api/v1',projectRouter)
     alwaysServeDocs:true,
     tags: ['auth','userProfile', 'skills', 'projects', 'volunteering', 'experiences', 'education', 'achievements'], 
     mongooseModels:mongoose.modelNames()
 });
-
-portfolioApp.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-  //   Store session
-  store: MongoStore.create({
-      mongoUrl:process.env.MONGO_URL
-  })
-
- 
-}));
-
-expressOasGenerator.handleRequests();
-portfolioApp.use(cors());
-portfolioApp.use(express.json());
-portfolioApp.use(express.static('portfolio'))
-
-
-// use routes
-portfolioApp.use('/api/v1', userRouter)
-portfolioApp.use('/api/v1', profileRouter)
-portfolioApp.use('/api/v1', educationRouter)
-portfolioApp.use('/api/v1', experienceRouter)
-portfolioApp.use('/api/v1', achievementRouter)
-portfolioApp.use('/api/v1',projectRouter)
-portfolioApp.use("/api/v1", skillRouter);
 
 
 // Handle OpenAPI requests and responses

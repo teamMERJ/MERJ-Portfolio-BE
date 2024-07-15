@@ -1,4 +1,3 @@
-
 import { Skills } from "../models/skill.js";
 import { User } from "../models/user.js";
 import { skillsSchema } from "../schema/skill.js";
@@ -30,6 +29,19 @@ export const createUserSkill = async (req, res) => {
   }
 };
 
+
+// this endpoint will get one event
+export const getSkill = async (req, res) => {
+  try {
+    const oneSkill = await Skills.findById(req.params.id);
+    if (!oneSkill) {
+      return res.status(400).send('Skills not found')
+    }
+    res.status(200).json(oneSkill);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 
 export const getAllUserSkills = async (req, res) => {

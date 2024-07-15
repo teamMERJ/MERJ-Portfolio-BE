@@ -25,7 +25,7 @@ const portfolioApp = express();
 // applying middlewares
 expressOasGenerator.handleResponses(portfolioApp, {
     alwaysServeDocs:true,
-    tags: ['auth','profiles', 'skills', 'projects', 'volunteering', 'experiences', 'education', 'achievements', 'users'], 
+    tags: ['auth','profiles', 'skills', 'projects', 'volunteering', 'experiences', 'education', 'achievements'], 
     mongooseModels:mongoose.modelNames()
 });
 

@@ -40,7 +40,7 @@ portfolioApp.use(session({
 
  
 }));
-portfolioApp.use(cors());
+portfolioApp.use(cors({credentials:true, origin: '*'}));
 portfolioApp.use(express.json());
 portfolioApp.use(express.static('portfolio'))
 

@@ -1,4 +1,4 @@
-import {Education} from "../models/education.js"
+import { Education } from "../models/education.js";
 import { educationSchema } from "../schema/education.js";
 import { User } from "../models/user.js";
 
@@ -38,12 +38,12 @@ export const addEducation = async (req, res) => {
 
 // get all education of a user
 export const getAllUserEducation = async (req, res) => {
+  console.log('kokiok', )
   try {
-    const userSessionId = req.session.user.id;
-    console.log(userSessionId)
-    // Query education records that belong to the userSessionId
-    const alleducation = await Education.find({ user: userSessionId }).exec();
-
+   //fetch education for  a user
+   const userSessionId = req.session.user.id
+   const alleducation = await Education.find({ user: userSessionId });
+   console.log('kokiok', alleducation)
     if (alleducation.length === 0) {
       return res.status(404).send("No education found for this user");
     }

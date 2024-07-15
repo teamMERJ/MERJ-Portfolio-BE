@@ -38,27 +38,20 @@ export const createUserProfile = async (req, res) => {
 
 
 
-// get only one user profile
-export const getOneProfile = async (req, res) => {
-  const userProfile = await profileSchema.findById(req.params.id)
-  res.status(200).json(userProfile)
-}
-
-
 // get all user related profile details
-export const getAllProfile = async (req, res) => {
+export const getUserProfile = async (req, res) => {
   try {
-    // get all profile details related to the user
-    const userId = req.params.id
-    const relatedProfile = await profileSchema.find({ userId })
-    if (relatedProfile.length == 0) {
-      return res.status(404).send('No profile added')
+  
+    const userSessionId = req.session.user.id
+    const profile = await UserProfile.find({ user: userSessionId });
+    if (!profile) {
+      return res.status(404).send("No profile added");
     }
-    res.status(200).json({ relatedProfile })
+    res.status(200).json({ profile});
   } catch (error) {
-    next(error)
+    return res.status(500).json({error})
   }
-}
+};
 
 
 // edit profile details 

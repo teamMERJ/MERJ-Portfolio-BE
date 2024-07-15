@@ -1,4 +1,3 @@
-import { getUser, login, signUp } from "../controllers/user.js";
 import { getUser, getUsers, login, signup } from "../controllers/user.js";
 import { Router } from "express";
 import { createUserProfile, updateUserProfile } from "../controllers/userProfile.js";

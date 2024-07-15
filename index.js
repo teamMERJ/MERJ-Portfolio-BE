@@ -59,7 +59,7 @@ portfolioApp.use('/api/v1', userRouter)
 
 
 expressOasGenerator.handleRequests();
-app.use((req, res) => res.redirect('/api-docs/'));
+portfolioApp.use((req, res) => res.redirect('/api-docs/'));
 // listening to the app for a response
 
 const port = process.env.PORT || 3080 

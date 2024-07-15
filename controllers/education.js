@@ -1,7 +1,6 @@
-import { User } from "../models/user.js";
-import {Education} from "../models/education.js"
+import { Education } from "../models/education.js";
 import { educationSchema } from "../schema/education.js";
-
+import { User } from "../models/user.js";
 
 //  add education for a user
 export const addEducation = async (req, res) => {
@@ -10,41 +9,6 @@ export const addEducation = async (req, res) => {
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
-
-
-    // after doing that find user with the id that you passed when creating education
-    const user = await User.findById(value.user);
-    if (!user) {
-      return res.status(400).send("User not found");
-    }
-    
-    // create education with the value
-    const newEducation = await Education.create(value);
-
-    
-
-    // if you find the user push the education id that was just created
-    user.education.push(newEducation.id);
-
-    //and save the user now with the educationId
-    await user.save();
-    //return response
-    //return the education
-    res.status(201).json({ education });
-  } catch (error) {
-    return res.status(500).send(error);
-  }
-};
-// this endpoint will get all education
-
-export const getAllUserEducation = async (req, res) => {
-  try {
-    // Fetch all education records belonging to the specified user ID
-    const allEducation = await Education.find({ user: req.user.id });
-
-    if (allEducation.length == 0) {
-      return res.status(404).send("No education added");
-
 
     //find a user with the id that was passed when creating the education
     console.log('userId', req.session.user.id)
@@ -72,30 +36,16 @@ export const getAllUserEducation = async (req, res) => {
 };
 
 
-// this endpoint will get one education
-export const getEducation = async (req, res) => {
-  try {
-    const educationId = req.params.id;
-    //fetching one education that belongs to a particular user
-    const oneEducation = await Education.findOne({
-      id: educationId,
-      user: req.user.id,
-    });
-    if (!oneEducation) {
-      return res.status(400).send("Education not found");
-
-
 // get all education of a user
 export const getAllUserEducation = async (req, res) => {
+  console.log('kokiok', )
   try {
-    const userSessionId = req.session.user.id;
-    console.log(userSessionId)
-    // Query education records that belong to the userSessionId
-    const alleducation = await Education.find({ user: userSessionId }).exec();
-
+   //fetch education for  a user
+   const userSessionId = req.session.user.id
+   const alleducation = await Education.find({ user: userSessionId });
+   console.log('kokiok', alleducation)
     if (alleducation.length === 0) {
       return res.status(404).send("No education found for this user");
-
     }
 
     res.status(200).json({ education: alleducation });
@@ -113,18 +63,6 @@ export const updateUserEducation = async (req, res) => {
       return res.status(400).send(error.details[0].message);
     }
 
-    // Filter by both education ID and user ID
-
-    const updateEducation = await Education.findByIdAndUpdate(
-      req.params.id,
-      { ...value },
-      { new: true }
-    );
-    res
-      .status(200)
-      .send(`Education ${updateEducation} was successfully updated`);
-
-
     const userSessionId = req.session.user.id; 
     const user = await User.findById(userSessionId);
     if (!user) {
@@ -137,7 +75,6 @@ export const updateUserEducation = async (req, res) => {
       }
 
     res.status(201).json({ Education: updatedEducation });
-
   } catch (error) {
     return res.status(500).json({error})
   }
@@ -155,11 +92,6 @@ export const deleteUserEducation = async (req, res) => {
       return res.status(404).send("User not found");
     }
 
-    // Filter by both education ID and user ID
-    const deletedEducation = await Education.findByIdAndDelete(req.params.id);
-    res.status(200).send(`Education ${deletedEducation} deleted successfully`);
-
-
     const education = await Education.findByIdAndDelete(req.params.id);
       if (!education) {
           return res.status(404).send("Education not found");
@@ -168,10 +100,11 @@ export const deleteUserEducation = async (req, res) => {
       user.education.pull(req.params.id);
       await user.save();
     res.status(200).json("Education deleted");
-
   } catch (error) {
     return res.status(500).json({error})
   }
 };
+
+
 
 

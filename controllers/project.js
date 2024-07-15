@@ -35,7 +35,7 @@ export const getAllUserProjects = async (req, res) => {
   try {
     //  fetch projects belonging to a  user
     const userSessionId = req.session.user.id
-    const allProject = await Project.find({ user: userSessionId }).populate('user').exec();
+    const allProject = await Project.find({ user: userSessionId });
     if (allProject.length == 0) {
       return res.status(404).send("No Project added");
     }

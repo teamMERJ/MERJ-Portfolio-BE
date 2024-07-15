@@ -8,5 +8,6 @@ export const projectSchema = joi.object({
     link: joi.string(),
     nameOfInstitution: joi.string(),
     startDate: joi.date(),
-    endDate: joi.date()
+    endDate: joi.date(),
+    user: joi.string()
 })

@@ -1,4 +1,4 @@
-import { getUser, getUsers, login, signup, token } from "../controllers/user.js";
+import { getUser, getUsers, login, signup, token, logout } from "../controllers/user.js";
 import { Router } from "express";
 import { createUserProfile, updateUserProfile } from "../controllers/userProfile.js";
 import { checkUserSession } from "../middlewares/auth.js";
@@ -8,13 +8,15 @@ export const userRouter = Router();
 
 userRouter.get("/users", getUsers);
 
-userRouter.post("/users/signup", signup);
+userRouter.post("/users/auth/signup", signup);
 
-userRouter.post("/users/login", login);
+userRouter.post("/users/auth/login", login);
 
-userRouter.post("/users/token/login", token);
+userRouter.post("/users/auth/token/login", token);
 
-userRouter.get("/users/:userName", getUser);
+userRouter.post("/users/auth/logout", logout);
+
+userRouter.get("/users/auth/:userName", getUser);
 
 userRouter.post("/users/userProfile", remoteUpload.fields([ { name: "profilePicture", maxCount: 1 },
    { name: "resume", maxCount: 1 },]),  checkUserSession,  createUserProfile);

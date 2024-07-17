@@ -32,7 +32,18 @@ export const createUserExperience = async (req, res, next) => {
   }
 };
 
-
+// this endpoint will get one project
+export const getExperience = async (req, res, next) => {
+  try {
+    const oneExperience = await Experience.findById(req.params.id);
+    if (!oneExperience) {
+      return res.status(400).send("Experience not found");
+    }
+    res.status(200).json(oneExperience);
+  } catch (error) {
+    next(error);
+  }
+};
 
 
 export const getAllUserExperience = async (req, res, next) => {

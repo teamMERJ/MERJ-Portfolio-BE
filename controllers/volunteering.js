@@ -31,6 +31,18 @@ export const createUserVolunteering= async (req, res, next) => {
   }
 };
 
+// this endpoint will get one volunteering experience
+export const getVolunteering = async (req, res, next) => {
+  try {
+    const oneVolunteering  = await Volunteering.findById(req.params.id);
+    if (!oneVolunteering) {
+      return res.status(400).send("Volunteering experience not found");
+    }
+    res.status(200).json(oneVolunteering);
+  } catch (error) {
+    next(error);
+  }
+};
 
 
 

@@ -35,6 +35,19 @@ export const createUserAchievement = async (req, res, next) => {
   }
 };
 
+// this endpoint will get one achievement
+export const getOneAchievement= async (req, res, next) => {
+  try {
+    const oneAchievement = await Achievement.findById(req.params.id);
+    if (!oneAchievement) {
+      return res.status(400).send("Achievement not found");
+    }
+    res.status(200).json(oneAchievement);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getAllUserAchievements = async (req, res, next) => {
   try {
     // fetching achievements that belongs to a particular user

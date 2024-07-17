@@ -4,7 +4,11 @@ import { Project } from "../models/project.js";
 
 export const createUserProject = async (req, res, next) => {
   try {
-    const { error, value } = projectSchema.validate(req.body);
+  
+    const { error, value } = projectSchema.validate({
+      ...req.body, 
+      image: req.file.filename
+    });
 
     if (error) {
       return res.status(400).send(error.details[0].message);
@@ -29,6 +33,18 @@ export const createUserProject = async (req, res, next) => {
   }
 };
 
+// this endpoint will get one project
+export const getProject = async (req, res, next) => {
+  try {
+    const oneProject  = await Project.findById(req.params.id);
+    if (!oneProject) {
+      return res.status(400).send("Project not found");
+    }
+    res.status(200).json(oneProject);
+  } catch (error) {
+    next(error);
+  }
+};
 
 
 export const getAllUserProjects = async (req, res, next) => {

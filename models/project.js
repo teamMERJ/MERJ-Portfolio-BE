@@ -5,6 +5,7 @@ const projectSchema = new Schema({
   image: { type: String },
   projectName: { type: String },
    description: { type: String },
+   image: {type:String},
    contributors: { type: String },
    skills: { type: String },
    link: { type: String },

@@ -29,7 +29,7 @@ export const createUserSkill = async (req, res, next) => {
   }
 };
 
-// this endpoint will get one event
+// this endpoint will get one skills
 export const getSkill = async (req, res, next) => {
   try {
     const oneSkill = await Skills.findById(req.params.id);

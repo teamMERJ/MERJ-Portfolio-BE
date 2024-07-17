@@ -33,6 +33,19 @@ export const addEducation = async (req, res, next) => {
   }
 };
 
+// this endpoint will get one education
+export const getEducation = async (req, res, next) => {
+  try {
+    const oneEducation  = await Education.findById(req.params.id);
+    if (!oneEducation) {
+      return res.status(400).send("Education not found");
+    }
+    res.status(200).json(oneEducation);
+  } catch (error) {
+    next(error);
+  }
+};
+
 // get all education of a user
 export const getAllUserEducation = async (req, res, next) => {
   console.log("kokiok");

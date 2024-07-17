@@ -11,9 +11,9 @@ const volunteeringSchema = new Schema({
   projectName: { type: String },
   startDate: { type: String },
   endDate: { type: String },
-  user: { type: Types.ObjectId, ref: "userModel" },
+  user: { type: Types.ObjectId, ref: "User" },
 });
 
 volunteeringSchema.plugin(toJSON);
 
-export const volunteeringModel = model("Volunteering", volunteeringSchema);
+export const Volunteering = model("Volunteering", volunteeringSchema);

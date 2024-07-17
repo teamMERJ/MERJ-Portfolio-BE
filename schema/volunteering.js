@@ -9,5 +9,6 @@ export const volunteeringSchema = joi.object({
     responsibility: joi.string(),
     projectName: joi.string(),
     startDate: joi.date().required(),
-    endDate: joi.date()
+    endDate: joi.date(),
+    user: joi.string()
 })

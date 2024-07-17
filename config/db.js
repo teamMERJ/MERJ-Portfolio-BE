@@ -4,8 +4,7 @@ import "dotenv/config"
 const MongoUrl = process.env.MONGO_URL;
 
 // connection link
-export const dbConnection = () =>{
-    mongoose.connect(MongoUrl).then(() => {
-        console.log('Database connected')
-    })
-};
+export const dbConnection = async() =>{
+     await mongoose.connect(MongoUrl)
+         console.log('Database connected')
+   } 

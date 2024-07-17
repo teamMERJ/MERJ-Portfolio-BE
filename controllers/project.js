@@ -2,7 +2,7 @@ import { projectSchema } from "../schema/project.js";
 import { User } from "../models/user.js";
 import { Project } from "../models/project.js";
 
-export const createUserProject = async (req, res) => {
+export const createUserProject = async (req, res, next) => {
   try {
     const { error, value } = projectSchema.validate(req.body);
 
@@ -10,7 +10,7 @@ export const createUserProject = async (req, res) => {
       return res.status(400).send(error.details[0].message);
     }
 
-    const userSessionId = req.session.user.id;
+    const userSessionId = req.session?.user?.id || req?.user?.id;
    
     const user = await User.findById(userSessionId);
     if (!user) {
@@ -25,36 +25,36 @@ export const createUserProject = async (req, res) => {
 
     res.status(201).json({ project });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 };
 
 
 
-export const getAllUserProjects = async (req, res) => {
+export const getAllUserProjects = async (req, res, next) => {
   try {
     //  fetch projects belonging to a  user
-    const userSessionId = req.session.user.id
+    const userSessionId = req.session?.user?.id || req?.user?.id;
     const allProject = await Project.find({ user: userSessionId });
     if (allProject.length == 0) {
       return res.status(404).send("No Project added");
     }
     res.status(200).json({ Projects: allProject });
   } catch (error) {
-    return res.status(500).json({error})
+    next(error)
   }
 };
 
 
 
-export const updateUserProject = async (req, res) => {
+export const updateUserProject = async (req, res, next) => {
     try {
       const { error, value } = projectSchema.validate(req.body);
       if (error) {
         return res.status(400).send(error.details[0].message);
       }
   
-      const userSessionId = req.session.user.id; 
+      const userSessionId = req.session?.user?.id || req?.user?.id;
       const user = await User.findById(userSessionId);
       if (!user) {
         return res.status(404).send("User not found");
@@ -67,16 +67,16 @@ export const updateUserProject = async (req, res) => {
   
       res.status(200).json({ project });
     } catch (error) {
-      return res.status(500).json({error: error.message})
+      next (error)
     }
   };
 
 
-  export const deleteUserProject = async (req, res) => {
+  export const deleteUserProject = async (req, res, next) => {
     try {
      
   
-      const userSessionId = req.session.user.id; 
+      const userSessionId = req.session?.user?.id || req?.user?.id;
       const user = await User.findById(userSessionId);
       if (!user) {
         return res.status(404).send("User not found");
@@ -91,7 +91,7 @@ export const updateUserProject = async (req, res) => {
         await user.save();
       res.status(200).json("Project deleted");
     } catch (error) {
-      return res.status(500).json({error})
+      next (error)
     }
   };
   

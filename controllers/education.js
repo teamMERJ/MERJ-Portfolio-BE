@@ -3,7 +3,7 @@ import { educationSchema } from "../schema/education.js";
 import { User } from "../models/user.js";
 
 //  add education for a user
-export const addEducation = async (req, res) => {
+export const addEducation = async (req, res, next) => {
   try {
     const { error, value } = educationSchema.validate(req.body);
     if (error) {
@@ -11,10 +11,8 @@ export const addEducation = async (req, res) => {
     }
 
     //find a user with the id that was passed when creating the education
-    console.log('userId', req.session.user.id)
-
-    const userSessionId = req.session.user.id
-
+    console.log("userId", req.session.user.id);
+    const userSessionId = req.session?.user?.id || req?.user?.id;
     const user = await User.findById(userSessionId);
     if (!user) {
       return res.status(404).send("User not found");
@@ -31,31 +29,31 @@ export const addEducation = async (req, res) => {
     //return education created
     res.status(201).json({ education });
   } catch (error) {
-    return res.status(500).send(error);
+    next(error);
   }
 };
 
-
 // get all education of a user
-export const getAllUserEducation = async (req, res) => {
-  console.log('kokiok', )
+export const getAllUserEducation = async (req, res, next) => {
+  console.log("kokiok");
   try {
-   //fetch education for  a user
-   const userSessionId = req.session.user.id
-   const alleducation = await Education.find({ user: userSessionId });
-   console.log('kokiok', alleducation)
+    //fetch education for  a user
+    const userSessionId = req.session?.user?.id || req?.user?.id;
+    const alleducation = await Education.find({ user: userSessionId });
+    console.log("kokiok", alleducation);
     if (alleducation.length === 0) {
       return res.status(404).send("No education found for this user");
     }
 
     res.status(200).json({ education: alleducation });
   } catch (error) {
-    console.error(error); // Log any unexpected errors for debugging
-    res.status(500).json({ error: 'Internal Server Error' });
+    // Log any unexpected errors for debugging
+    res.status(500).json({ error: "Internal Server Error" });
+    next(error);
   }
 };
 // update an education of a user
-export const updateUserEducation = async (req, res) => {
+export const updateUserEducation = async (req, res, next) => {
   try {
     const { error, value } = educationSchema.validate(req.body);
 
@@ -63,20 +61,24 @@ export const updateUserEducation = async (req, res) => {
       return res.status(400).send(error.details[0].message);
     }
 
-    const userSessionId = req.session.user.id; 
+    const userSessionId = req.session?.user?.id || req?.user?.id;
     const user = await User.findById(userSessionId);
     if (!user) {
       return res.status(404).send("User not found");
     }
 
-    const updatedEducation = await Education.findByIdAndUpdate(req.params.id, value, { new: true });
-      if (!Education) {
-          return res.status(404).send("Education not found");
-      }
+    const updatedEducation = await Education.findByIdAndUpdate(
+      req.params.id,
+      value,
+      { new: true }
+    );
+    if (!Education) {
+      return res.status(404).send("Education not found");
+    }
 
     res.status(201).json({ Education: updatedEducation });
   } catch (error) {
-    return res.status(500).json({error})
+    next(error)
   }
 };
 
@@ -84,27 +86,21 @@ export const updateUserEducation = async (req, res) => {
 
 export const deleteUserEducation = async (req, res) => {
   try {
-   
-
-    const userSessionId = req.session.user.id; 
+    const userSessionId = req.session?.user?.id || req?.user?.id;
     const user = await User.findById(userSessionId);
     if (!user) {
       return res.status(404).send("User not found");
     }
 
     const education = await Education.findByIdAndDelete(req.params.id);
-      if (!education) {
-          return res.status(404).send("Education not found");
-      }
+    if (!education) {
+      return res.status(404).send("Education not found");
+    }
 
-      user.education.pull(req.params.id);
-      await user.save();
+    user.education.pull(req.params.id);
+    await user.save();
     res.status(200).json("Education deleted");
   } catch (error) {
-    return res.status(500).json({error})
+    next(error);
   }
 };
-
-
-
-

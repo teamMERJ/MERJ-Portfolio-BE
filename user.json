@@ -5,7 +5,7 @@
   "email": "janesmith@example.com",
    "password": "pw1234",
    "userName": "JaneS"
-    "confirmedPassword": "pw1234",
+    "confirmedPassword": "pw1234"
     
 
 
@@ -43,14 +43,14 @@
    
  
 
-
+{
    "schoolName":"University of Oxford",
    "location" :"Oxford, UK",
    "program" : "Doctor of Philosophy (PhD) in Physics",
    "qualification" :"Doctoral Degree",
    "grade":"Second Class Upper",
    "startDate": "Sep 01 2016",
-   "endDate":"Thu Dec 31 2020"
+   "endDate":"Thu Dec 31 2020"}
 
 
    {

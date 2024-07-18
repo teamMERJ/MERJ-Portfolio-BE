@@ -109,9 +109,9 @@ export const getUser = async (req, res, next) => {
         options,
       });
 
-    if (!userDetails) {
-      return res.status(200).json("User not found");
-    }
+    // if (!userDetails) {
+    //   return res.status(200).json("User not found");
+    // }
     return res.status(200).json({ user: userDetails });
   } catch (error) {
     next(error);

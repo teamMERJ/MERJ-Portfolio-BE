@@ -26,7 +26,7 @@ export const createUserExperience = async (req, res, next) => {
 
     await user.save();
 
-    res.status(201).json({ experience });
+    res.status(201).json({message:"Experience created successfully", experience });
   } catch (error) {
     next(error);
   }
@@ -36,9 +36,9 @@ export const createUserExperience = async (req, res, next) => {
 export const getExperience = async (req, res, next) => {
   try {
     const oneExperience = await Experience.findById(req.params.id);
-    if (!oneExperience) {
-      return res.status(400).json({Experience: oneExperience});
-    }
+    // if (!oneExperience) {
+    //   return res.status(400).json({Experience: oneExperience});
+    // }
     res.status(200).json({Experience: oneExperience});
   } catch (error) {
     next(error);
@@ -55,9 +55,9 @@ export const getAllUserExperience = async (req, res, next) => {
     const allExperiences = await Experience.find({ user: userId });
     console.log("All Experiences:", allExperiences); // Log the fetched experiences
 
-    if (allExperiences.length === 0) {
-      return res.status(404).json({Experience: getAllUserExperience});
-    }
+    // if (allExperiences.length === 0) {
+    //   return res.status(404).json({Experience: getAllUserExperience});
+    // }
 
     res.status(200).json({ experiences: allExperiences });
   } catch (error) {
@@ -86,7 +86,7 @@ export const updateUserExperience = async (req, res, next) => {
   
       const experience = await Experience.findByIdAndUpdate(req.params.id, value, { new: true });
         if (!experience) {
-            return res.status(404).send({Experience: experience});
+            return res.status(404).send({message:"Experience updated successfully", experience});
         }
   
       res.status(200).json({ experience });

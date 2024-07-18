@@ -23,7 +23,7 @@ export const createUserSkill = async (req, res, next) => {
 
     await user.save();
 
-    res.status(201).json({ skill });
+    res.status(201).json({ message: "Skill added successfully",skill });
   } catch (error) {
     next(error);
   }
@@ -33,9 +33,9 @@ export const createUserSkill = async (req, res, next) => {
 export const getSkill = async (req, res, next) => {
   try {
     const oneSkill = await Skills.findById(req.params.id);
-    if (!oneSkill) {
-      return res.status(400).send(oneSkill);
-    }
+    // if (!oneSkill) {
+    //   return res.status(400).send(oneSkill);
+    // }
     res.status(200).json({Skills: oneSkill});
   } catch (error) {
     next(error);
@@ -47,9 +47,9 @@ export const getAllUserSkills = async (req, res, next) => {
     //we are fetching Skill that belongs to a particular user
     const userId = req.session?.user?.id || req?.user?.id;
     const allSkill = await Skills.find({ user: userId });
-    if (allSkill.length == 0) {
-      return res.status(404).send(oneSkill);
-    }
+    // if (allSkill.length == 0) {
+    //   return res.status(404).send(oneSkill);
+    // }
     res.status(200).json({ Skills: allSkill });
   } catch (error) {
     next(error);
@@ -77,7 +77,7 @@ export const updateUserSkill = async (req, res, next) => {
       return res.status(404).send({Skill:skill});
     }
 
-    res.status(200).json({ skill });
+    res.status(200).json({message:"Skill updated successfully", skill });
   } catch (error) {
     next(error);
   }

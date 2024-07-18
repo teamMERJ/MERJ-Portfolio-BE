@@ -28,7 +28,7 @@ export const createUserProfile = async (req, res, next) => {
 
     await user.save();
 
-    res.status(201).json({ profile });
+    res.status(201).json({message:"Profile created successfully", profile });
   } catch (error) {
     next(error);
   }
@@ -40,9 +40,9 @@ export const getUserProfile = async (req, res, next) => {
   try {
     const userId = req.session?.user?.id || req?.user?.id;
     const profile = await userProfileModel.find({ user: userId });
-    if (!profile) {
-      return res.status(404).json({Profile:profile});
-    }
+    // if (!profile) {
+    //   return res.status(404).json({Profile:profile});
+    // }
     res.status(200).json({ profile }); 
   } catch (error) {
     next(error);
@@ -75,7 +75,7 @@ export const updateUserProfile = async (req, res, next) => {
       return res.status(404).json({Profile:profile} );
     }
 
-    res.status(201).json({ profile });
+    res.status(201).json({message:"Profile updated successfully" ,profile });
   } catch (error) {
     next(error);
   }
@@ -91,7 +91,7 @@ export const deleteUserProfile = async (req, res, next) => {
     console.log("value", value);
 
     const deletedprofile = await userProfileModel.findByIdAndDelete(req.params.id);
-    res.status(200).send(`Profile with ID ${deletedprofile} has deleted `);
+    res.status(200).send(`Profile deleted successfully `);
   } catch (error) {
     next(error);
   }

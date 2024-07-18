@@ -27,7 +27,7 @@ export const createUserProject = async (req, res, next) => {
 
     await user.save();
 
-    res.status(201).json({ project });
+    res.status(201).json({ message:"Project added successfully",project });
   } catch (error) {
     next(error);
   }
@@ -37,9 +37,9 @@ export const createUserProject = async (req, res, next) => {
 export const getProject = async (req, res, next) => {
   try {
     const oneProject  = await Project.findById(req.params.id);
-    if (!oneProject) {
-      return res.status(400).send(oneProject);
-    }
+    // if (!oneProject) {
+    //   return res.status(400).send(oneProject);
+    // }
     res.status(200).json({projects: oneProject});
   } catch (error) {
     next(error);
@@ -52,9 +52,9 @@ export const getAllUserProjects = async (req, res, next) => {
     //  fetch projects belonging to a  user
     const userId = req.session?.user?.id || req?.user?.id;
     const allProject = await Project.find({ user: userId });
-    if (allProject.length == 0) {
-      return res.status(404).send({Project: allProject});
-    }
+    // if (allProject.length == 0) {
+    //   return res.status(404).send({Project: allProject});
+    // }
     res.status(200).json({ Projects: allProject });
   } catch (error) {
     next(error)
@@ -81,7 +81,7 @@ export const updateUserProject = async (req, res, next) => {
             return res.status(404).json({Project : project});
         }
   
-      res.status(200).json({ project });
+      res.status(200).json({ message: "Project updated successfully",project });
     } catch (error) {
       next (error)
     }

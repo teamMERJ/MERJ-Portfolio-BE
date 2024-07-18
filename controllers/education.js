@@ -26,7 +26,7 @@ export const addEducation = async (req, res, next) => {
     await user.save();
 
     //return education created
-    res.status(201).json({ education });
+    res.status(201).json({message:"Education added successfully", education });
   } catch (error) {
     next(error);
   }
@@ -36,9 +36,9 @@ export const addEducation = async (req, res, next) => {
 export const getEducation = async (req, res, next) => {
   try {
     const oneEducation  = await Education.findById(req.params.id);
-    if (!oneEducation) {
-      return res.status(400).json({Education : oneEducation});
-    }
+    // if (!oneEducation) {
+    //   return res.status(400).json({Education : oneEducation});
+    // }
     res.status(200).json(oneEducation);
   } catch (error) {
     next(error);
@@ -51,9 +51,9 @@ export const getAllUserEducation = async (req, res, next) => {
     //fetch education for  a user
     const userId = req.session?.user?.id || req?.user?.id;
     const alleducation = await Education.find({ user: userId });
-    if (alleducation.length === 0) {
-      return res.status(404).json({Education: alleducation});
-    }
+    // if (alleducation.length === 0) {
+    //   return res.status(404).json({Education: alleducation});
+    // }
 
     res.status(200).json({ education: alleducation });
   } catch (error) {
@@ -86,7 +86,7 @@ export const updateUserEducation = async (req, res, next) => {
       return res.status(404).json({Education :updatedEducation} );
     }
 
-    res.status(201).json({ Education: updatedEducation });
+    res.status(201).json({ message:"Education updated successfully", updatedEducation });
   } catch (error) {
     next(error)
   }

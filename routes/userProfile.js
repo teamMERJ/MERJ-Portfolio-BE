@@ -17,6 +17,6 @@ profileRouter.patch("/users/userProfile/:id",checkAuth,remoteUpload.fields([
     { name: "profilePicture", maxCount: 1 },{ name: "resume", maxCount: 1 },]),updateUserProfile
 );
 
-profileRouter.delete( "/users/useProfile/:id", checkAuth, deleteUserProfile);
+profileRouter.delete( "/users/userProfile/:id", checkAuth, deleteUserProfile);
 
 

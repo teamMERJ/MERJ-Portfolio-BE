@@ -37,9 +37,9 @@ export const getExperience = async (req, res, next) => {
   try {
     const oneExperience = await Experience.findById(req.params.id);
     if (!oneExperience) {
-      return res.status(400).send("Experience not found");
+      return res.status(400).json({Experience: oneExperience});
     }
-    res.status(200).json(oneExperience);
+    res.status(200).json({Experience: oneExperience});
   } catch (error) {
     next(error);
   }
@@ -56,7 +56,7 @@ export const getAllUserExperience = async (req, res, next) => {
     console.log("All Experiences:", allExperiences); // Log the fetched experiences
 
     if (allExperiences.length === 0) {
-      return res.status(404).send("No experiences found for this user");
+      return res.status(404).json({Experience: getAllUserExperience});
     }
 
     res.status(200).json({ experiences: allExperiences });
@@ -86,7 +86,7 @@ export const updateUserExperience = async (req, res, next) => {
   
       const experience = await Experience.findByIdAndUpdate(req.params.id, value, { new: true });
         if (!experience) {
-            return res.status(404).send("Experience not found");
+            return res.status(404).send({Experience: experience});
         }
   
       res.status(200).json({ experience });

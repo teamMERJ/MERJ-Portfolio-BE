@@ -36,9 +36,9 @@ export const getVolunteering = async (req, res, next) => {
   try {
     const oneVolunteering  = await Volunteering.findById(req.params.id);
     if (!oneVolunteering) {
-      return res.status(400).send("Volunteering experience not found");
+      return res.status(400).send({Volunteerings: oneVolunteering});
     }
-    res.status(200).json(oneVolunteering);
+    res.status(200).json({Volunteering:oneVolunteering});
   } catch (error) {
     next(error);
   }
@@ -56,7 +56,7 @@ export const getAllUserVolunteering= async (req, res) => {
     console.log("All Volunteering:", allVolunteering); // Log the fetched experiences
 
     if (allVolunteering.length === 0) {
-      return res.status(404).send("No volunteering added");
+      return res.status(404).json({Volunteering: allVolunteering});;
     }
 
     res.status(200).json({ Volunteering: allVolunteering});
@@ -85,7 +85,7 @@ export const updateUserVolunteering = async (req, res) => {
   
       const volunteering = await Volunteering.findByIdAndUpdate(req.params.id, value, { new: true });
         if (!volunteering) {
-            return res.status(404).send("Volunteering experience not found");
+            return res.status(404).json({Volunteering:volunteering});
         }
   
       res.status(200).json({ volunteering });

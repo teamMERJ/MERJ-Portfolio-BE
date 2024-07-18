@@ -30,6 +30,7 @@ export const createUserProfile = async (req, res, next) => {
 
     res.status(201).json({ profile });
   } catch (error) {
+    console.log(error.message)
     next(error);
   }
 };
@@ -41,7 +42,7 @@ export const getUserProfile = async (req, res, next) => {
     const userId = req.session?.user?.id || req?.user?.id;
     const profile = await userProfileModel.find({ user: userId });
     if (!profile) {
-      return res.status(404).send("No profile added");
+      return res.status(404).json({Profile:profile});
     }
     res.status(200).json({ profile }); 
   } catch (error) {
@@ -72,7 +73,7 @@ export const updateUserProfile = async (req, res, next) => {
       new: true,
     });
     if (!profile) {
-      return res.status(404).send("Profile not found");
+      return res.status(404).json({Profile:profile} );
     }
 
     res.status(201).json({ profile });

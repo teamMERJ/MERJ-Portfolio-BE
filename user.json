@@ -40,6 +40,14 @@
   "password": "Br0wnP@ss", 
   "userName": "MikeB"
   "confirmedPassword": "Br0wnP@ss",
+
+
+  "firstName": "Frank",
+ "lastName": "Smith",
+  "email": "fmith@example.com",
+   "password": "hyu78",
+   "userName": "FS",
+    "confirmedPassword": "hyu78"
    
  
 

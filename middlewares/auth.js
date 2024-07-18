@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export const checkUserSession = (req, res, next) => {
+export const checkAuth = (req, res, next) => {
   if (req.session.user) {
     next();
   } else if (req.headers.authorization) {

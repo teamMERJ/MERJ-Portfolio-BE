@@ -1,17 +1,17 @@
 import { createUserVolunteering, deleteUserVolunteering, getAllUserVolunteering, getVolunteering, updateUserVolunteering } from "../controllers/volunteering.js";
-import { checkUserSession } from "../middlewares/auth.js";
+import { checkAuth } from "../middlewares/auth.js";
 import { Router } from "express";
 
 
 
 export const volunteeringRouter = Router()
 
-volunteeringRouter.post('/users/volunteering', checkUserSession, createUserVolunteering)
+volunteeringRouter.post('/users/volunteering', checkAuth, createUserVolunteering)
 
-volunteeringRouter.get('/users/volunteering', checkUserSession, getAllUserVolunteering)
+volunteeringRouter.get('/users/volunteering', checkAuth, getAllUserVolunteering)
 
-volunteeringRouter.get('/users/volunteering/:id', checkUserSession, getVolunteering)
+volunteeringRouter.get('/users/volunteering/:id', checkAuth, getVolunteering)
 
-volunteeringRouter.patch('/users/volunteering/:id', checkUserSession, updateUserVolunteering)
+volunteeringRouter.patch('/users/volunteering/:id', checkAuth, updateUserVolunteering)
 
-volunteeringRouter.delete('/users/volunteering/:id', checkUserSession, deleteUserVolunteering)
+volunteeringRouter.delete('/users/volunteering/:id', checkAuth, deleteUserVolunteering)

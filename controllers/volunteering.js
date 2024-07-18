@@ -11,15 +11,15 @@ export const createUserVolunteering= async (req, res, next) => {
       return res.status(400).send(error.details[0].message);
     }
 
-    const userSessionId = req.session?.user?.id || req?.user?.id;
+    const userId = req.session?.user?.id || req?.user?.id;
    
 
-    const user = await User.findById(userSessionId);
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).send("User not found");
     }
 
-    const volunteering = await Volunteering.create({ ...value, user: userSessionId });
+    const volunteering = await Volunteering.create({ ...value, user: userId });
 
     user.volunteering.push(volunteering.id)
 
@@ -48,11 +48,11 @@ export const getVolunteering = async (req, res, next) => {
 
 export const getAllUserVolunteering= async (req, res) => {
   try {
-    const userSessionId = req.session?.user?.id || req?.user?.id;
-    console.log("User Session ID:", userSessionId); // Log the user ID to verify
+    const userId = req.session?.user?.id || req?.user?.id;
+    console.log("User ID:", userId); // Log the user ID to verify
 
     // Fetch all experiences that belong to the userSessionId
-    const allVolunteering = await Volunteering.find({ user: userSessionId });
+    const allVolunteering = await Volunteering.find({ user: userId });
     console.log("All Volunteering:", allVolunteering); // Log the fetched experiences
 
     if (allVolunteering.length === 0) {
@@ -77,15 +77,15 @@ export const updateUserVolunteering = async (req, res) => {
         return res.status(400).send(error.details[0].message);
       }
   
-      const userSessionId = req.session?.user?.id || req?.user?.id; 
-      const user = await User.findById(userSessionId);
+      const userId = req.session?.user?.id || req?.user?.id; 
+      const user = await User.findById(userId);
       if (!user) {
         return res.status(404).send("User not found");
       }
   
       const volunteering = await Volunteering.findByIdAndUpdate(req.params.id, value, { new: true });
         if (!volunteering) {
-            return res.status(404).send("experience not found");
+            return res.status(404).send("Volunteering experience not found");
         }
   
       res.status(200).json({ volunteering });
@@ -99,8 +99,8 @@ export const updateUserVolunteering = async (req, res) => {
     try {
      
   
-      const userSessionId = req.session?.user?.id || req?.user?.id;
-      const user = await User.findById(userSessionId);
+      const userId = req.session?.user?.id || req?.user?.id;
+      const user = await User.findById(userId);
       if (!user) {
         return res.status(404).send("User not found");
       }

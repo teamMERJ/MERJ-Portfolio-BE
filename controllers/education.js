@@ -11,9 +11,8 @@ export const addEducation = async (req, res, next) => {
     }
 
     //find a user with the id that was passed when creating the education
-    console.log("userId", req.session.user.id);
-    const userSessionId = req.session?.user?.id || req?.user?.id;
-    const user = await User.findById(userSessionId);
+    const userId = req.session?.user?.id || req?.user?.id;
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).send("User not found");
     }
@@ -48,12 +47,10 @@ export const getEducation = async (req, res, next) => {
 
 // get all education of a user
 export const getAllUserEducation = async (req, res, next) => {
-  console.log("kokiok");
   try {
     //fetch education for  a user
-    const userSessionId = req.session?.user?.id || req?.user?.id;
-    const alleducation = await Education.find({ user: userSessionId });
-    console.log("kokiok", alleducation);
+    const userId = req.session?.user?.id || req?.user?.id;
+    const alleducation = await Education.find({ user: userId });
     if (alleducation.length === 0) {
       return res.status(404).send("No education found for this user");
     }
@@ -74,8 +71,8 @@ export const updateUserEducation = async (req, res, next) => {
       return res.status(400).send(error.details[0].message);
     }
 
-    const userSessionId = req.session?.user?.id || req?.user?.id;
-    const user = await User.findById(userSessionId);
+    const userId = req.session?.user?.id || req?.user?.id;
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).send("User not found");
     }
@@ -99,8 +96,8 @@ export const updateUserEducation = async (req, res, next) => {
 
 export const deleteUserEducation = async (req, res) => {
   try {
-    const userSessionId = req.session?.user?.id || req?.user?.id;
-    const user = await User.findById(userSessionId);
+    const userId = req.session?.user?.id || req?.user?.id;
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).send("User not found");
     }

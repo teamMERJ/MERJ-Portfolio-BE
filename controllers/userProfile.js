@@ -30,7 +30,6 @@ export const createUserProfile = async (req, res, next) => {
 
     res.status(201).json({ profile });
   } catch (error) {
-    console.log(error.message)
     next(error);
   }
 };

@@ -2,7 +2,7 @@ import { Schema, model, Types } from "mongoose";
 import { toJSON } from "@reis/mongoose-to-json";
 
 const skillsSchema = new Schema({
-  name: { type: String },
+  name: { type: String},
   levelOfProficiency: {
     type: String,
     enum: ["beginner", "intermediate", "advanced", "expert"],

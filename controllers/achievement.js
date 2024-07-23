@@ -110,7 +110,7 @@ export const deleteUserAchievement = async (req, res, next) => {
     user.achievements.pull(req.params.id);
     await user.save();
 
-    res.status(200).json("Achievement deleted");
+    res.status(200).json({message: "Achievement deleted"});
   } catch (error) {
     next(error);
   }

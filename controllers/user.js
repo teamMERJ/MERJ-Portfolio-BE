@@ -118,11 +118,10 @@ export const getUser = async (req, res, next) => {
         path: "projects",
         options,
       });
-      console.log(userDetails)
+     
 
     return res.status(200).json({ user: userDetails });
   } catch (error) {
-    console.log(error.message)
     next(error);
   }
 };

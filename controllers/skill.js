@@ -21,7 +21,7 @@ export const createUserSkill = async (req, res, next) => {
     const skillNameToLowerCase = value.name.toLowerCase();
 
     // compare that skill name with all existing skills for that user in the database
-    const skillsExists = user.skills.find(skill => skill.name.toLowerCase() === skillNameToLowerCase);
+    const skillsExists = user.skills.find(skill => skill.name.toLowerCase() === skillNameToLowerCase);o
 
     // check if skills already exist for a user
     if (skillsExists){

@@ -15,7 +15,6 @@ export const createUserProfile = async (req, res, next) => {
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
-
     const userId = req.session?.user?.id || req?.user?.id;
 
     const user = await User.findById(userId);
@@ -40,18 +39,21 @@ export const createUserProfile = async (req, res, next) => {
 export const getUserProfile = async (req, res, next) => {
   try {
     const userId = req.session?.user?.id || req?.user?.id;
-    const profile = await userProfileModel.find({ user: userId }).populate({
+    const profile = await userProfileModel.findOne({ user: userId }).populate({
       path: 'user',
       select: '-password'
     });
-    // if (!profile) {
-    //   return res.status(404).json({Profile:profile});
-    // }
+
+    if (!profile) {
+      const user = await User.findById(userId).select({firstName: true, lastName:true})
+      return res.status(200).json({Profile:user});
+    }
     res.status(200).json({ profile }); 
   } catch (error) {
     next(error);
   }
 };
+
 
 // edit profile details
 export const updateUserProfile = async (req, res, next) => {

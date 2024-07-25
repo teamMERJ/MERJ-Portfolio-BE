@@ -118,12 +118,11 @@ export const getUser = async (req, res, next) => {
         path: "projects",
         options,
       });
+      console.log(userDetails)
 
-    // if (!userDetails) {
-    //   return res.status(200).json("User not found");
-    // }
     return res.status(200).json({ user: userDetails });
   } catch (error) {
+    console.log(error.message)
     next(error);
   }
 };

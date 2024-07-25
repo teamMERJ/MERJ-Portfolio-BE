@@ -12,9 +12,20 @@ export const createUserSkill = async (req, res, next) => {
 
     const userId = req.session?.user?.id || req?.user?.id;
 
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).populate('skills');
     if (!user) {
       return res.status(404).send("User not found");
+    }
+
+    // convert the skill name entered to lower case
+    const skillNameToLowerCase = value.name.toLowerCase();
+
+    // compare that skill name with all existing skills for that user in the database
+    const skillsExists = user.skills.find(skill => skill.name.toLowerCase() === skillNameToLowerCase);o
+
+    // check if skills already exist for a user
+    if (skillsExists){
+      return res.status(400).send('This skill already exists')
     }
 
     const skill = await Skills.create({ ...value, user: userId });
@@ -23,7 +34,7 @@ export const createUserSkill = async (req, res, next) => {
 
     await user.save();
 
-    res.status(201).json({ skill });
+    res.status(201).json({ message: "Skill added successfully",skill });
   } catch (error) {
     next(error);
   }
@@ -33,10 +44,10 @@ export const createUserSkill = async (req, res, next) => {
 export const getSkill = async (req, res, next) => {
   try {
     const oneSkill = await Skills.findById(req.params.id);
-    if (!oneSkill) {
-      return res.status(400).send("Skills not found");
-    }
-    res.status(200).json(oneSkill);
+    // if (!oneSkill) {
+    //   return res.status(400).send(oneSkill);
+    // }
+    res.status(200).json({Skills: oneSkill});
   } catch (error) {
     next(error);
   }
@@ -47,9 +58,9 @@ export const getAllUserSkills = async (req, res, next) => {
     //we are fetching Skill that belongs to a particular user
     const userId = req.session?.user?.id || req?.user?.id;
     const allSkill = await Skills.find({ user: userId });
-    if (allSkill.length == 0) {
-      return res.status(404).send("No Skill added");
-    }
+    // if (allSkill.length == 0) {
+    //   return res.status(404).send(oneSkill);
+    // }
     res.status(200).json({ Skills: allSkill });
   } catch (error) {
     next(error);
@@ -74,10 +85,10 @@ export const updateUserSkill = async (req, res, next) => {
       new: true,
     });
     if (!skill) {
-      return res.status(404).send("Skill not found");
+      return res.status(404).send({Skill:skill});
     }
 
-    res.status(200).json({ skill });
+    res.status(200).json({message:"Skill updated successfully", skill });
   } catch (error) {
     next(error);
   }

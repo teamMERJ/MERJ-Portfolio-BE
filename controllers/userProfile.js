@@ -2,6 +2,7 @@ import { userProfileModel } from "../models/userProfile.js";
 import { User } from "../models/user.js";
 import { profileSchema } from "../schema/userProfile.js";
 
+
 // create a user porfile
 export const createUserProfile = async (req, res, next) => {
   try {
@@ -14,7 +15,6 @@ export const createUserProfile = async (req, res, next) => {
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
-
     const userId = req.session?.user?.id || req?.user?.id;
 
     const user = await User.findById(userId);
@@ -28,7 +28,7 @@ export const createUserProfile = async (req, res, next) => {
 
     await user.save();
 
-    res.status(201).json({ profile });
+    res.status(201).json({message:"Profile created successfully", profile });
   } catch (error) {
     next(error);
   }
@@ -39,15 +39,21 @@ export const createUserProfile = async (req, res, next) => {
 export const getUserProfile = async (req, res, next) => {
   try {
     const userId = req.session?.user?.id || req?.user?.id;
-    const profile = await userProfileModel.find({ user: userId });
+    const profile = await userProfileModel.findOne({ user: userId }).populate({
+      path: 'user',
+      select: '-password'
+    });
+
     if (!profile) {
-      return res.status(404).send("No profile added");
+      const user = await User.findById(userId).select({firstName: true, lastName:true})
+      return res.status(200).json({Profile:user});
     }
     res.status(200).json({ profile }); 
   } catch (error) {
     next(error);
   }
 };
+
 
 // edit profile details
 export const updateUserProfile = async (req, res, next) => {
@@ -59,7 +65,7 @@ export const updateUserProfile = async (req, res, next) => {
     });
 
     if (error) {
-      return res.status(400).send(error.details[0].message);
+      return res.status(400).send(error.details[0].message);                                                     
     }
 
     const userId = req.session?.user?.id || req?.user?.id;
@@ -72,27 +78,13 @@ export const updateUserProfile = async (req, res, next) => {
       new: true,
     });
     if (!profile) {
-      return res.status(404).send("Profile not found");
+      return res.status(404).json("Profile not found");
     }
 
-    res.status(201).json({ profile });
+    res.status(201).json({message:"Profile updated successfully" ,profile });
   } catch (error) {
     next(error);
   }
 };
 
-// delete a profile
-export const deleteUserProfile = async (req, res, next) => {
-  try {
-    const { error, value } = profileSchema.validate(req.body);
-    if (error) {
-      return res.status(400).send(error.details[0].message);
-    }
-    console.log("value", value);
 
-    const deletedprofile = await userProfileModel.findByIdAndDelete(req.params.id);
-    res.status(200).send(`Profile with ID ${deletedprofile} has deleted `);
-  } catch (error) {
-    next(error);
-  }
-};

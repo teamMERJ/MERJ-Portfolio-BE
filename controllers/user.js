@@ -1,7 +1,7 @@
 import { User } from "../models/user.js";
 import { userSchema } from "../schema/user.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
 export const signup = async (req, res, next) => {
   try {
@@ -70,9 +70,19 @@ export const token = async (req, res, next) => {
       return res.status(401).json("Invalid login details");
     }
     // Generate a token for the user
-     const token = jwt.sign({id: user.id}, process.env.JWT_PRIVATE_KEY, {expiresIn: "2h"});
+    const token = jwt.sign({ id: user.id }, process.env.JWT_PRIVATE_KEY, {
+      expiresIn: "72h",
+    });
     // Return response
-    res.status(201).json({message: "Login successful", accessToken: token});
+    res.status(201).json({
+      message: "Login successful",
+      accessToken: token,
+      user: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        userName: user.userName,
+      },
+    });
   } catch (error) {
     next(error);
   }
@@ -109,9 +119,9 @@ export const getUser = async (req, res, next) => {
         options,
       });
 
-    if (!userDetails) {
-      return res.status(200).json("User not found");
-    }
+    // if (!userDetails) {
+    //   return res.status(200).json("User not found");
+    // }
     return res.status(200).json({ user: userDetails });
   } catch (error) {
     next(error);

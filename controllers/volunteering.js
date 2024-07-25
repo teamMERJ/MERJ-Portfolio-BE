@@ -25,7 +25,7 @@ export const createUserVolunteering= async (req, res, next) => {
 
     await user.save();
 
-    res.status(201).json({ volunteering });
+    res.status(201).json({ message: "Volunteering experience added successfully",volunteering });
   } catch (error) {
     next(error);
   }
@@ -35,10 +35,10 @@ export const createUserVolunteering= async (req, res, next) => {
 export const getVolunteering = async (req, res, next) => {
   try {
     const oneVolunteering  = await Volunteering.findById(req.params.id);
-    if (!oneVolunteering) {
-      return res.status(400).send("Volunteering experience not found");
-    }
-    res.status(200).json(oneVolunteering);
+    // if (!oneVolunteering) {
+    //   return res.status(400).send({Volunteerings: oneVolunteering});
+    // }
+    res.status(200).json({Volunteering:oneVolunteering});
   } catch (error) {
     next(error);
   }
@@ -46,7 +46,7 @@ export const getVolunteering = async (req, res, next) => {
 
 
 
-export const getAllUserVolunteering= async (req, res) => {
+export const getAllUserVolunteering= async (req, res,next) => {
   try {
     const userId = req.session?.user?.id || req?.user?.id;
     console.log("User ID:", userId); // Log the user ID to verify
@@ -55,21 +55,20 @@ export const getAllUserVolunteering= async (req, res) => {
     const allVolunteering = await Volunteering.find({ user: userId });
     console.log("All Volunteering:", allVolunteering); // Log the fetched experiences
 
-    if (allVolunteering.length === 0) {
-      return res.status(404).send("No volunteering added");
-    }
+    // if (allVolunteering.length === 0) {
+    //   return res.status(404).json({Volunteering: allVolunteering});;
+    // }
 
     res.status(200).json({ Volunteering: allVolunteering});
   } catch (error) {
-    console.error("Error fetching experiences:", error); // Log any errors encountered
-    res.status(500).json({ error: "Internal Server Error" });
+    next(error);
   }
 };
 
 
 
 
-export const updateUserVolunteering = async (req, res) => {
+export const updateUserVolunteering = async (req, res,next) => {
     try {
       const { error, value } = volunteeringSchema.validate(req.body);
   
@@ -85,17 +84,17 @@ export const updateUserVolunteering = async (req, res) => {
   
       const volunteering = await Volunteering.findByIdAndUpdate(req.params.id, value, { new: true });
         if (!volunteering) {
-            return res.status(404).send("Volunteering experience not found");
+            return res.status(404).json({Volunteering:volunteering});
         }
   
-      res.status(200).json({ volunteering });
+      res.status(200).json({message:"Volunteering experience successfully updated", volunteering });
     } catch (error) {
-      return res.status(500).json({error: error.message})
+     next(error)
     }
   };
 
 
-  export const deleteUserVolunteering = async (req, res) => {
+  export const deleteUserVolunteering = async (req, res,next) => {
     try {
      
   
@@ -114,7 +113,7 @@ export const updateUserVolunteering = async (req, res) => {
         await user.save();
       res.status(200).json("Volunteering deleted");
     } catch (error) {
-      return res.status(500).json({error})
+      next(error)
     }
   };
   

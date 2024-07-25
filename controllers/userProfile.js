@@ -8,8 +8,8 @@ export const createUserProfile = async (req, res, next) => {
   try {
     const { error, value } = profileSchema.validate({
       ...req.body,
-      profilePicture: req.files.filename,
-      resume: req.files.filename,
+      profilePicture: req.files?.profilePicture[0].filename,
+      resume: req.files?.resume[0].filename,
     });
 
     if (error) {
@@ -60,8 +60,8 @@ export const updateUserProfile = async (req, res, next) => {
   try {
     const { error, value } = profileSchema.validate({
       ...req.body,
-      profilePicture: req.files.profilePicture[0].filename,
-      resume: req.files.resume[0].filename,
+      profilePicture: req.files?.profilePicture?.filename,
+      resume: req.files?.resume?.filename,
     });
 
     if (error) {

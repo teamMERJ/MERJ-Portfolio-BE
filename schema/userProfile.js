@@ -11,7 +11,7 @@ import joi from 'joi';
         contact: joi.number(),
         resume: joi.string(), 
         languages: joi.array().items(joi.string()),
-        gitHubLink: joi.string(),
-        linkedInlink: joi.string()
-    
+        githubLink: joi.string(),
+        linkedinLink: joi.string(),
+        twitterLink: joi.string()
     });
